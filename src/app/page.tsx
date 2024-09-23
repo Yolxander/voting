@@ -1,4 +1,4 @@
-import VotingItems from './pages/VotingItems'
+import VotingItems from '../pages/VotingItems'
 
 export default function Home() {
   return (
