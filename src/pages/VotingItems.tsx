@@ -16,6 +16,8 @@ export default function VotingItems() {
   const [votingItems, setVotingItems] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 8 // Set items per page
 
   const router = useRouter() // Using the updated router hook from next/navigation
 
@@ -38,6 +40,27 @@ export default function VotingItems() {
 
   const handleItemClick = (item) => {
     router.push(`/voting/${encodeURIComponent(item.ItemID)}`) // Adjusted for next/navigation push
+  }
+
+  const totalPages = Math.ceil(votingItems.length / itemsPerPage)
+
+  const currentItems = votingItems
+      .filter(item => item.Name.toLowerCase().includes(searchTerm.toLowerCase())) // Filter based on search term
+      .slice(
+          (currentPage - 1) * itemsPerPage,
+          currentPage * itemsPerPage
+      )
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1)
+    }
+  }
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1)
+    }
   }
 
   if (loading) {
@@ -95,8 +118,8 @@ export default function VotingItems() {
               </div>
 
               <div className="space-y-4">
-                {votingItems.length > 0 ? (
-                    votingItems.map((item, index) => (
+                {currentItems.length > 0 ? (
+                    currentItems.map((item, index) => (
                         <div
                             key={item.ItemID}
                             onClick={() => handleItemClick(item)}
@@ -107,9 +130,7 @@ export default function VotingItems() {
                               <div className="text-sm text-gray-500">{item.ItemID}</div>
                               <h2 className="font-semibold">{item.Name}</h2>
                               <div className="text-sm text-gray-500">{item.VoteDate}</div>
-                              <p className="text-blue-500 underline text-sm">
-                                View Details
-                              </p>
+                              <p className="text-blue-500 underline text-sm">View Details</p>
                             </div>
                             {item.Result === 'Carried' && (
                                 <span className="text-green-500 text-sm">✓ Carried</span>
@@ -121,17 +142,20 @@ export default function VotingItems() {
                     <p>No voting items found.</p>
                 )}
               </div>
+
               <div className="flex justify-center items-center space-x-4 mt-8">
-                <ChevronLeft className="w-6 h-6" />
-                <span className="font-bold">1</span>
-                <span>2</span>
-                <span>3</span>
-                <span>4</span>
-                <ChevronRight className="w-6 h-6" />
+                <Button variant="outline" size="sm" onClick={handlePrevPage} disabled={currentPage === 1}>
+                  <ChevronLeft className="w-6 h-6" />
+                </Button>
+                <span className="font-bold">{currentPage}</span>
+                <Button variant="outline" size="sm" onClick={handleNextPage} disabled={currentPage === totalPages}>
+                  <ChevronRight className="w-6 h-6" />
+                </Button>
               </div>
             </div>
 
             <div className="w-full md:w-64 space-y-6">
+              {/* Sidebar content remains unchanged */}
               <div>
                 <h2 className="font-semibold mb-2">Filter</h2>
                 <Button variant="outline" size="sm">Clear</Button>
