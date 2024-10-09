@@ -24,15 +24,13 @@ interface Filters {
   }
   categories: string[]
 }
-
-
 export default function VotingItems() {
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState<string>('')
   const [sortBy, setSortBy] = useState<'Date Ascending' | 'Date Descending'>('Date Ascending')
   const [votingItems, setVotingItems] = useState<VotingItem[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<Filters>({
     result: {
       carried: false,
@@ -42,7 +40,7 @@ export default function VotingItems() {
   })
   const itemsPerPage = 8
 
-  const categories = [
+  const categories: string[] = [
     'Energy', 'Homes and Buildings', 'Infrastructure', 'Resilience',
     'People and Neighbourhoods', 'TransformTO', 'Transportation', 'Waste'
   ]
@@ -54,9 +52,10 @@ export default function VotingItems() {
       setLoading(true)
       setError(null)
       try {
-        const items = await fetchVotingItems()
+        const items: VotingItem[] = await fetchVotingItems()
         setVotingItems(items)
-      } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error: any) {
         setError('Failed to load voting items. Please try again later.')
       } finally {
         setLoading(false)
@@ -233,78 +232,27 @@ export default function VotingItems() {
               </div>
               <div>
                 <h3 className="font-semibold mb-2">Result</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center">
-                    <Checkbox
-                        id="carried"
-                        checked={filters.result.carried}
-                        onCheckedChange={() => handleFilterChange('result', { ...filters.result, carried: !filters.result.carried })}
-                        className="border-black"
-                    />
-                    <label htmlFor="carried" className="ml-2">Carried</label>
-                  </div>
-                  <div className="flex items-center">
-                    <Checkbox
-                        id="lost"
-                        checked={filters.result.lost}
-                        onCheckedChange={() => handleFilterChange('result', { ...filters.result, lost: !filters.result.lost })}
-                        className="border-black"
-                    />
-                    <label htmlFor="lost" className="ml-2">Lost</label>
-                  </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox checked={filters.result.carried} onCheckedChange={(checked) => handleFilterChange('result', { ...filters.result, carried: checked })} />
+                  <span>Carried</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox checked={filters.result.lost} onCheckedChange={(checked) => handleFilterChange('result', { ...filters.result, lost: checked })} />
+                  <span>Lost</span>
                 </div>
               </div>
-
               <div>
                 <h3 className="font-semibold mb-2">Categories</h3>
-                <div className="space-y-2">
-                  {categories.map((category) => (
-                      <div key={category} className="flex items-center">
-                        <Checkbox
-                            id={category}
-                            checked={filters.categories.includes(category)}
-                            onCheckedChange={() => handleCategoryChange(category)}
-                            className="border-black"
-                        />
-                        <label htmlFor={category} className="ml-2">{category}</label>
-                      </div>
-                  ))}
-                </div>
+                {categories.map((category) => (
+                    <div key={category} className="flex items-center space-x-2">
+                      <Checkbox checked={filters.categories.includes(category)} onCheckedChange={() => handleCategoryChange(category)} />
+                      <span>{category}</span>
+                    </div>
+                ))}
               </div>
             </div>
           </div>
         </main>
-
-        <footer className="bg-gray-100 py-8 border-t border-black">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div>
-                <h3 className="font-semibold mb-2">About this Website</h3>
-                <ul className="space-y-1">
-                  <li>Our Story</li>
-                  <li>Get Involved</li>
-                  <li>Contact Us</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">Join Mailing List</h3>
-                <form className="space-y-2">
-                  <Input type="email" placeholder="Email address" className="border-black" />
-                  <Button type="submit" className="bg-black text-white hover:bg-gray-800">Sign Up</Button>
-                </form>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">Land Acknowledgement</h3>
-                <p className="text-sm">
-                  The Climate Voting Records Project acknowledges that this initiative took place on
-                  the traditional territory of many nations including the Mississaugas of the Credit, the
-                  Anishnabeg, the Chippewa, the Haudenosaunee and the Wendat peoples and is now
-                  home to many diverse First Nations, Inuit and Métis peoples...
-                </p>
-              </div>
-            </div>
-          </div>
-        </footer>
       </div>
   )
 }
