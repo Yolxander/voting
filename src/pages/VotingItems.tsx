@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input"
 import { Select } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { fetchVotingItems } from '@/lib/fetchVotingItems'
-import Image from 'next/image'  // Import the Image component
 
 interface VotingItem {
   ItemID: string
