@@ -7,7 +7,7 @@ interface SelectProps {
   children: ReactNode;
 }
 
-export function Select({ value, onValueChange, children }: SelectProps) {
+export function Select({ value, children }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -27,15 +27,18 @@ export function Select({ value, onValueChange, children }: SelectProps) {
   );
 }
 
+// eslint-disable-next-line react/display-name
 Select.Trigger = ({ children }: { children: ReactNode }) => {
   return <>{children}</>;
 };
 
+// eslint-disable-next-line react/display-name
 Select.Content = ({ children }: { children: ReactNode }) => {
   return <>{children}</>;
 };
 
-Select.Item = ({ value, children, onClick }: { value: string; children: ReactNode; onClick: () => void }) => {
+// eslint-disable-next-line react/display-name
+Select.Item = ({children, onClick }: { value: string; children: ReactNode; onClick: () => void }) => {
   return (
     <div
       className="px-4 py-2 cursor-pointer hover:bg-gray-100"

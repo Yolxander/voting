@@ -55,8 +55,6 @@ async function fetchVotingItem(itemId: string): Promise<VotingItem | null> {
 
 export default function ItemDetail() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [votingItem, setVotingItem] = useState<VotingItem | null>(null)
-  const router = useRouter()
   const itemId = '2020.IE15.11'; // Get itemId safely from router.query
 
   useEffect(() => {
@@ -125,9 +123,11 @@ export default function ItemDetail() {
           <div className="mb-6">
             <h3 className="font-semibold mb-2">Background</h3>
             <p className="text-sm">
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
               "The climate crisis grows more urgent every year. The window to make significant and lasting
               change is disappearing. Action must happen immediately and it must be at the necessary
-              scale required to respond to this crisis." In response, the Net Zero Strategy targets new and
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
+              scale required to respond to this crisis" In response, the Net Zero Strategy targets new and
               accelerated actions to drive down community-wide emissions, particularly in the near- and
               the short term, and establishes the trajectory needed to reach net zero by 2040.
             </p>
@@ -137,8 +137,10 @@ export default function ItemDetail() {
           <div className="mb-6">
             <h3 className="font-semibold mb-2">Details</h3>
             <p className="text-sm">
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
               This item "recommends that Toronto adopt a new net zero by 2040 goal. By doing so,
               Toronto will ensure alignment with the 2030 trajectory to meet the necessary science-based
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
               commitments to keep the planet's temperature habitable."
             </p>
             <Button variant="link" className="text-sm p-0 mt-2">Read More</Button>

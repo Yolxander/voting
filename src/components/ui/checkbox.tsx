@@ -2,7 +2,7 @@
 import { InputHTMLAttributes } from 'react';
 import classNames from 'classnames';
 
-interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {}
+type CheckboxProps = InputHTMLAttributes<HTMLInputElement>
 
 export function Checkbox({ className, ...props }: CheckboxProps) {
   const checkboxClasses = classNames(
