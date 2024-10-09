@@ -138,6 +138,16 @@ export default function VotingItems() {
     return <div className="text-center py-8">Loading...</div>
   }
 
+  type SelectTriggerProps = {
+    children: React.ReactNode;
+    className?: string; // Add className prop
+  };
+
+// In your Select.Trigger component
+  const SelectTrigger: React.FC<SelectTriggerProps> = ({ children, className }) => {
+    return <div className={className}>{children}</div>; // Apply className to a wrapping element
+  };
+
   return (
       <div className="min-h-screen flex flex-col bg-white text-black">
         <header className="border-b border-black">
@@ -174,15 +184,23 @@ export default function VotingItems() {
                   />
                 </div>
                 <div className="flex-shrink-0">
-                  <Select value={sortBy} onValueChange={(value: string) => setSortBy(value as 'Date Ascending' | 'Date Descending')}>
-                    <Select.Trigger className="w-[180px] border-black">
-                      <Select.Value placeholder="Sort By" />
-                    </Select.Trigger>
-                    <Select.Content>
-                      <Select.Item value="Date Ascending">Date Ascending</Select.Item>
-                      <Select.Item value="Date Descending">Date Descending</Select.Item>
-                    </Select.Content>
-                  </Select>
+                  <div className="flex-shrink-0">
+                    <div className="flex-shrink-0">
+                      <Select value={sortBy} onValueChange={(value: string) => setSortBy(value as 'Date Ascending' | 'Date Descending')}>
+                        <div className="w-[180px] border-black">
+                          <Select.Trigger>
+                            <Select.Value placeholder="Sort By" />
+                          </Select.Trigger>
+                        </div>
+                        <Select.Content>
+                          <Select.Item value="Date Ascending">Date Ascending</Select.Item>
+                          <Select.Item value="Date Descending">Date Descending</Select.Item>
+                        </Select.Content>
+                      </Select>
+                    </div>
+
+                  </div>
+
                 </div>
               </div>
 
