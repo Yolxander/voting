@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Select } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { fetchVotingItems } from '@/lib/fetchVotingItems'
+import Image from 'next/image'  // Import the Image component
 
 interface VotingItem {
   ItemID: string
@@ -54,7 +55,6 @@ export default function VotingItems() {
       try {
         const items: VotingItem[] = await fetchVotingItems()
         setVotingItems(items)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error: any) {
         setError('Failed to load voting items. Please try again later.')
       } finally {
