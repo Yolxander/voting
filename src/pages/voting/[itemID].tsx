@@ -1,6 +1,5 @@
-'use client'
-
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Search, ChevronDown } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -13,8 +12,69 @@ interface CouncilMember {
   image: string
 }
 
+interface VotingItem {
+  ItemID: string
+  Name: string
+  VoteDate: string
+  Result: 'Carried' | 'Lost'
+  Categories: string[]
+}
+
+const API_BASE_URL = 'https://climatefast.webcomand.com/ws/get'
+const API_KEY = '6njQdl3IpkiuMODvQoXdPoV9RQ3vkUXM'
+
+async function fetchVotingItem(itemId: string): Promise<VotingItem | null> {
+  try {
+    const response = await fetch(`${API_BASE_URL}?query=SELECT * FROM Motion WHERE ItemID='${itemId}'`, {
+      headers: {
+        'Authorization': `Token ${API_KEY}`,
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data = await response.json()
+
+    // Log the contents key to verify that it holds the voting items
+    console.log('Full API response:', data)
+    console.log('Contents:', data.contents)
+
+    // Check if contents exist and is an array, return it if so
+    if (data.contents && Array.isArray(data.contents)) {
+      return data.contents[0]; // Assuming you're interested in the first item
+    } else {
+      throw new Error('Unexpected data structure in contents')
+    }
+  } catch (error) {
+    console.error('Error fetching voting item:', error)
+    return null
+  }
+}
+
 export default function ItemDetail() {
   const [searchTerm, setSearchTerm] = useState('')
+  const [votingItem, setVotingItem] = useState<VotingItem | null>(null)
+  const router = useRouter()
+  const itemId = '2020.IE15.11'; // Get itemId safely from router.query
+
+  useEffect(() => {
+    if (itemId) {
+      // Fetch specific voting item details if needed
+      const loadVotingItem = async () => {
+        try {
+          // Call the correct function to fetch the voting item
+          const votingItem = await fetchVotingItem(itemId);
+          setVotingItem(votingItem);
+        } catch (error) {
+          console.error('Failed to load voting item:', error);
+          alert('Failed to load voting item. Please try again later.');
+        }
+      }
+      loadVotingItem();
+    }
+  }, [itemId]);
 
   const councilMembers: CouncilMember[] = [
     { name: 'Paul Ainslie', ward: 'Ward 24, Scarborough-Guildwood', vote: 'Yes', image: '/placeholder.svg?height=48&width=48' },
@@ -23,11 +83,7 @@ export default function ItemDetail() {
     { name: 'Shelley Carroll', ward: 'Ward 17, Don Valley North', vote: 'Yes', image: '/placeholder.svg?height=48&width=48' },
     { name: 'Mike Colle', ward: 'Ward 8, Eglinton-Lawrence', vote: 'Yes', image: '/placeholder.svg?height=48&width=48' },
     { name: 'Gary Crawford', ward: 'Ward 20, Scarborough Southwest', vote: 'Yes', image: '/placeholder.svg?height=48&width=48' },
-    { name: 'Joe Cressy', ward: 'Ward 10, Spadina-Fort York', vote: 'Yes', image: '/placeholder.svg?height=48&width=48' },
-    { name: 'John Filion', ward: 'Ward 18, Willowdale', vote: 'Yes', image: '/placeholder.svg?height=48&width=48' },
-    { name: 'Paula Fletcher', ward: 'Ward 14, Toronto-Danforth', vote: 'Yes', image: '/placeholder.svg?height=48&width=48' },
-    { name: 'Michael Ford', ward: 'Ward 1, Etobicoke North', vote: 'No', image: '/placeholder.svg?height=48&width=48' },
-    // Add more council members here...
+    // Add more council members as needed
   ]
 
   const filteredMembers = councilMembers.filter(member =>
@@ -39,8 +95,7 @@ export default function ItemDetail() {
         <header className="border-b border-black">
           <div className="container mx-auto px-4 py-2 flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <span className="font-bold">Climate</span>
-              <span>Voting Record</span>
+              <span className="font-bold">Voting Item Details</span>
             </div>
             <nav>
               <ul className="flex space-x-4">

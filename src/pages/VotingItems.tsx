@@ -159,7 +159,7 @@ export default function VotingItems() {
         </header>
 
         <main className="flex-grow container mx-auto px-4 py-8">
-          <h1 className="text-2xl font-bold mb-4">Items</h1>
+          <h1 className="text-2xl font-bold mb-4">Motions</h1>
 
           {error && <p className="text-red-500">{error}</p>}
 
