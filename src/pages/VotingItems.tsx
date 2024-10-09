@@ -55,7 +55,8 @@ export default function VotingItems() {
         const items: VotingItem[] = await fetchVotingItems()
         setVotingItems(items)
       } catch (error) {
-        setError('Failed to load voting items. Please try again later.')
+        // Error handling removed
+        console.error('Failed to load voting items', error)
       } finally {
         setLoading(false)
       }
@@ -159,8 +160,6 @@ export default function VotingItems() {
         <main className="flex-grow container mx-auto px-4 py-8">
           <h1 className="text-2xl font-bold mb-4">Motions</h1>
 
-          {error && <p className="text-red-500">{error}</p>}
-
           <div className="flex flex-col md:flex-row gap-8">
             <div className="flex-grow">
               <div className="flex flex-col sm:flex-row gap-4 mb-4">
@@ -229,6 +228,7 @@ export default function VotingItems() {
                 <h2 className="font-semibold mb-2">Filter</h2>
                 <Button variant="outline" size="sm" onClick={handleClearFilters} className="border-black text-black">Clear</Button>
                 <div className="flex flex-col space-y-2">
+                  <h3 className="font-semibold mb-2">Results</h3>
                   <Checkbox
                       label="Carried"
                       checked={filters.result.carried}
@@ -239,17 +239,17 @@ export default function VotingItems() {
                       checked={filters.result.lost}
                       onChange={() => handleFilterChange('result', { carried: filters.result.carried, lost: !filters.result.lost })}
                   />
-                </div>
-                <h3 className="font-semibold mb-2">Categories</h3>
-                <div className="flex flex-col space-y-2">
-                  {categories.map((category) => (
-                      <Checkbox
-                          key={category}
-                          label={category}
-                          checked={filters.categories.includes(category)}
-                          onChange={() => handleCategoryChange(category)}
-                      />
-                  ))}
+                  <h3 className="font-semibold mb-2">Categories</h3>
+                  <div className="flex flex-col space-y-2">
+                    {categories.map((category) => (
+                        <Checkbox
+                            key={category}
+                            label={category}
+                            checked={filters.categories.includes(category)}
+                            onChange={() => handleCategoryChange(category)}
+                        />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
