@@ -27,7 +27,7 @@ interface Filters {
 
 export default function VotingItems() {
   const [searchTerm, setSearchTerm] = useState<string>('')
-  const [sortBy, setSortBy] = useState<'Date Ascending' | 'Date Descending'>('Date Ascending')
+  const [sortBy, setSortBy] = useState<'Date Ascending' | 'Date Descending'>('Date Ascending');
   const [votingItems, setVotingItems] = useState<VotingItem[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState<number>(1)
@@ -174,7 +174,7 @@ export default function VotingItems() {
                   />
                 </div>
                 <div className="flex-shrink-0">
-                  <Select value={sortBy} onValueChange={(value: 'Date Ascending' | 'Date Descending') => setSortBy(value)}>
+                  <Select value={sortBy} onValueChange={(value: string) => setSortBy(value as 'Date Ascending' | 'Date Descending')}>
                     <Select.Trigger className="w-[180px] border-black">
                       <Select.Value placeholder="Sort By" />
                     </Select.Trigger>
