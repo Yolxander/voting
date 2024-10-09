@@ -24,12 +24,12 @@ interface Filters {
   }
   categories: string[]
 }
+
 export default function VotingItems() {
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [sortBy, setSortBy] = useState<'Date Ascending' | 'Date Descending'>('Date Ascending')
   const [votingItems, setVotingItems] = useState<VotingItem[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [filters, setFilters] = useState<Filters>({
     result: {
@@ -38,6 +38,7 @@ export default function VotingItems() {
     },
     categories: [],
   })
+
   const itemsPerPage = 8
 
   const categories: string[] = [
@@ -50,11 +51,10 @@ export default function VotingItems() {
   useEffect(() => {
     const loadVotingItems = async () => {
       setLoading(true)
-      setError(null)
       try {
         const items: VotingItem[] = await fetchVotingItems()
         setVotingItems(items)
-      } catch (error: any) {
+      } catch (error) {
         setError('Failed to load voting items. Please try again later.')
       } finally {
         setLoading(false)
@@ -228,26 +228,29 @@ export default function VotingItems() {
               <div>
                 <h2 className="font-semibold mb-2">Filter</h2>
                 <Button variant="outline" size="sm" onClick={handleClearFilters} className="border-black text-black">Clear</Button>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-2">Result</h3>
-                <div className="flex items-center space-x-2">
-                  <Checkbox checked={filters.result.carried} onCheckedChange={(checked) => handleFilterChange('result', { ...filters.result, carried: checked })} />
-                  <span>Carried</span>
+                <div className="flex flex-col space-y-2">
+                  <Checkbox
+                      label="Carried"
+                      checked={filters.result.carried}
+                      onChange={() => handleFilterChange('result', { carried: !filters.result.carried, lost: filters.result.lost })}
+                  />
+                  <Checkbox
+                      label="Lost"
+                      checked={filters.result.lost}
+                      onChange={() => handleFilterChange('result', { carried: filters.result.carried, lost: !filters.result.lost })}
+                  />
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox checked={filters.result.lost} onCheckedChange={(checked) => handleFilterChange('result', { ...filters.result, lost: checked })} />
-                  <span>Lost</span>
-                </div>
-              </div>
-              <div>
                 <h3 className="font-semibold mb-2">Categories</h3>
-                {categories.map((category) => (
-                    <div key={category} className="flex items-center space-x-2">
-                      <Checkbox checked={filters.categories.includes(category)} onCheckedChange={() => handleCategoryChange(category)} />
-                      <span>{category}</span>
-                    </div>
-                ))}
+                <div className="flex flex-col space-y-2">
+                  {categories.map((category) => (
+                      <Checkbox
+                          key={category}
+                          label={category}
+                          checked={filters.categories.includes(category)}
+                          onChange={() => handleCategoryChange(category)}
+                      />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
