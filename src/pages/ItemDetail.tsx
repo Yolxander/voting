@@ -81,8 +81,10 @@ export default function ItemDetail() {
           <div className="mb-6">
             <h3 className="font-semibold mb-2">Details</h3>
             <p className="text-sm">
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
               This item "recommends that Toronto adopt a new net zero by 2040 goal. By doing so,
               Toronto will ensure alignment with the 2030 trajectory to meet the necessary science-based
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
               commitments to keep the planet's temperature habitable."
             </p>
             <Button variant="link" className="text-sm p-0">Read More</Button>
