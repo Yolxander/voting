@@ -67,8 +67,10 @@ export default function ItemDetail() {
           <div className="mb-6">
             <h3 className="font-semibold mb-2">Background</h3>
             <p className="text-sm">
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
               "The climate crisis grows more urgent every year. The window to make significant and lasting
               change is disappearing. Action must happen immediately and it must be at the necessary
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
               scale required to respond to this crisis." In response, the Net Zero Strategy targets new and
               accelerated actions to drive down community-wide emissions, particularly in the near- and
               the short term, and establishes the trajectory needed to reach net zero by 2040.
